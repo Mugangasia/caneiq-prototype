@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: caneiq
+      POSTGRES_PASSWORD: caneiq
+      POSTGRES_DB: caneiq
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U caneiq -d caneiq"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://caneiq:caneiq@db:5432/caneiq
+      DATABASE_URL_SYNC: postgresql+psycopg://caneiq:caneiq@db:5432/caneiq
+      REDIS_URL: redis://redis:6379/0
+      CORS_ORIGINS: http://localhost:3000
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  worker:
+    build: ./backend
+    command: celery -A app.workers.celery_app:celery_app worker --loglevel=info
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://caneiq:caneiq@db:5432/caneiq
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - redis
+
+  # Uncomment when the belt map moves from GeoJSON to vector tiles:
+  # martin:
+  #   image: ghcr.io/maplibre/martin:latest
+  #   environment:
+  #     DATABASE_URL: postgres://caneiq:caneiq@db:5432/caneiq
+  #   ports:
+  #     - "3001:3000"
+  #   depends_on:
+  #     - db
+
+volumes:
+  pgdata:
