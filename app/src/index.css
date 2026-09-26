@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 18% 96.5%;
+    --foreground: 28 30% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 28 30% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 28 30% 13%;
+    --primary: 122 42% 29%;
+    --primary-foreground: 100 40% 97%;
+    --secondary: 40 12% 93%;
+    --secondary-foreground: 28 30% 16%;
+    --muted: 40 12% 93.5%;
+    --muted-foreground: 32 9% 42%;
+    --accent: 100 30% 94%;
+    --accent-foreground: 122 42% 24%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 10% 87.5%;
+    --input: 40 10% 84%;
+    --ring: 122 42% 32%;
+    --radius: 0.5rem;
+    --sidebar-background: 46 14% 97.5%;
+    --sidebar-foreground: 30 12% 32%;
+    --sidebar-primary: 122 42% 29%;
+    --sidebar-primary-foreground: 100 40% 97%;
+    --sidebar-accent: 100 28% 93%;
+    --sidebar-accent-foreground: 122 42% 22%;
+    --sidebar-border: 40 10% 88%;
+    --sidebar-ring: 122 42% 32%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "tnum" 0;
+  }
+  ::selection {
+    background: hsl(122 42% 29% / 0.18);
+  }
+}
+
+/* ---------- typographic chrome ---------- */
+.label-caps {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 10px;
+  font-weight: 500;
+}
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ---------- hairline scrollbars ---------- */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: hsl(40 8% 80%);
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: hsl(122 20% 55%);
+}
+
+/* ---------- leaflet overrides ---------- */
+.leaflet-container {
+  font-family: Inter, sans-serif;
+  background: #e8e6e0;
+  outline: none;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgb(30 20 10 / 0.18);
+  border: 1px solid hsl(40 10% 87%);
+}
+.leaflet-popup-content {
+  margin: 10px 12px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.leaflet-popup-tip {
+  box-shadow: none;
+  border: 1px solid hsl(40 10% 87%);
+}
+.leaflet-bar {
+  border: 1px solid hsl(40 10% 85%) !important;
+  box-shadow: 0 2px 8px rgb(30 20 10 / 0.12) !important;
+  border-radius: 6px !important;
+  overflow: hidden;
+}
+.leaflet-bar a {
+  border-bottom: 1px solid hsl(40 10% 90%) !important;
+  color: hsl(28 30% 20%) !important;
+}
+.leaflet-control-attribution {
+  font-size: 8px !important;
+  background: rgb(255 255 255 / 0.65) !important;
+  padding: 0 4px;
+}
+.twin-marker {
+  background: transparent;
+  border: none;
+}
+
+/* ---------- ticker ---------- */
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-track {
+  animation: ticker-scroll 55s linear infinite;
+}
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+.pulse-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+/* panel hover affordance */
+.hover-lift {
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.hover-lift:hover {
+  box-shadow: 0 4px 14px rgb(30 25 10 / 0.07);
+  border-color: hsl(122 25% 70%);
+}
